@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traffic Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="dashboard-body">
+
+    <div class="dashboard-title-main">Live Traffic Dashboard</div>
+
+    <div class="dashboard-topbar">
+        <div></div>
+        <div class="dashboard-actions">
+            <a href="/home" class="nav-btn">Back</a>
+            <a href="/analysis" class="nav-btn">Analysis</a>
+            <a href="/logout" class="nav-btn logout-btn">Logout</a>
+        </div>
+    </div>
+
+    <div class="live-grid">
+
+        <div class="live-card">
+            <div class="signal-column">
+                <div class="signal-housing">
+                    <div id="lane1-red" class="bulb"></div>
+                    <div id="lane1-yellow" class="bulb"></div>
+                    <div id="lane1-green" class="bulb"></div>
+                </div>
+            </div>
+            <div class="video-column">
+                <img src="/video1" alt="Lane 1 Video">
+            </div>
+        </div>
+
+        <div class="live-card">
+            <div class="signal-column">
+                <div class="signal-housing">
+                    <div id="lane2-red" class="bulb"></div>
+                    <div id="lane2-yellow" class="bulb"></div>
+                    <div id="lane2-green" class="bulb"></div>
+                </div>
+            </div>
+            <div class="video-column">
+                <img src="/video2" alt="Lane 2 Video">
+            </div>
+        </div>
+
+        <div class="live-card">
+            <div class="signal-column">
+                <div class="signal-housing">
+                    <div id="lane3-red" class="bulb"></div>
+                    <div id="lane3-yellow" class="bulb"></div>
+                    <div id="lane3-green" class="bulb"></div>
+                </div>
+            </div>
+            <div class="video-column">
+                <img src="/video3" alt="Lane 3 Video">
+            </div>
+        </div>
+
+        <div class="live-card">
+            <div class="signal-column">
+                <div class="signal-housing">
+                    <div id="lane4-red" class="bulb"></div>
+                    <div id="lane4-yellow" class="bulb"></div>
+                    <div id="lane4-green" class="bulb"></div>
+                </div>
+            </div>
+            <div class="video-column">
+                <img src="/video4" alt="Lane 4 Video">
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function clearLaneSignal(lane) {
+            document.getElementById(`lane${lane}-red`).className = "bulb";
+            document.getElementById(`lane${lane}-yellow`).className = "bulb";
+            document.getElementById(`lane${lane}-green`).className = "bulb";
+        }
+
+        function setLaneSignal(lane, signal) {
+            clearLaneSignal(lane);
+
+            if (signal === "red") {
+                document.getElementById(`lane${lane}-red`).classList.add("glow-red");
+            } else if (signal === "yellow") {
+                document.getElementById(`lane${lane}-yellow`).classList.add("glow-yellow");
+            } else if (signal === "green") {
+                document.getElementById(`lane${lane}-green`).classList.add("glow-green");
+            }
+        }
+
+        async function updateDashboard() {
+            try {
+                const response = await fetch("/lane_data");
+                const data = await response.json();
+
+                for (let i = 1; i <= 4; i++) {
+                    const lane = data[`lane${i}`];
+                    if (!lane) continue;
+                    setLaneSignal(i, lane.signal);
+                }
+            } catch (error) {
+                console.log("update error", error);
+            }
+        }
+
+        setInterval(updateDashboard, 1000);
+        updateDashboard();
+    </script>
+
+</body>
+</html>
