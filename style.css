@@ -352,3 +352,38 @@ body {
         height: 260px;
     }
 }
+/* Responsive dashboard for mobile screens */
+
+@media (max-width: 768px) {
+    .live-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-topbar {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .dashboard-actions {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .live-card {
+        grid-template-columns: 80px 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .dashboard-body {
+        padding: 10px;
+    }
+
+    .dashboard-title-main {
+        font-size: 26px;
+    }
+
+    .live-card {
+        grid-template-columns: 1fr;
+    }
+}
